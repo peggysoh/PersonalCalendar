@@ -162,6 +162,7 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
         String[] email_add = {"email_address"};
         String subject = "subject";
         String mail_body = "mail body";
+        String participants = "email_address";
 
 
         eventDbHelper = new EventDbHelper(getApplicationContext());
@@ -180,6 +181,7 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
             PARTICIPANTS = cursor.getString(9);
 
             email_add = new String[]{PARTICIPANTS};
+            participants = PARTICIPANTS;
             subject = new String("Event Reminder: " + name);
             if (START_HR == -1) {
                 mail_body = new String("You have an event:\n" +
@@ -199,6 +201,7 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
             }
         }
 
+        /*
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("plain/text");
         intent.putExtra(Intent.EXTRA_EMAIL, email_add);
@@ -206,6 +209,16 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
         intent.putExtra(Intent.EXTRA_TEXT, mail_body);
         startActivity(Intent.createChooser(intent, ""));
 
+        setResult(RESULT_OK, null);
+        finish();
+        */
+
+        Intent intent = new Intent(this, ShareEvent.class);
+        intent.putExtra("participants", participants);
+        //intent.putExtra("participants", email_add);
+        intent.putExtra("subject", subject);
+        intent.putExtra("mail_body", mail_body);
+        startActivity(intent);
         setResult(RESULT_OK, null);
         finish();
     }

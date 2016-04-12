@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int cvMonth, cvDate, cvYear;
     private ListView listView;
+    int todayDate, todayMonth, todayYear;
     SQLiteDatabase sqLiteDatabase;
     EventDbHelper eventDbHelper;
     Cursor cursor;
@@ -57,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
         cvDate = c.get(Calendar.DATE);
         cvMonth = c.get(Calendar.MONTH) + 1;
         cvYear = c.get(Calendar.YEAR);
+        todayDate = c.get(Calendar.DATE);
+        todayMonth = c.get(Calendar.MONTH) + 1;
+        todayYear = c.get(Calendar.YEAR);
 
         // Set new selected date
         CalendarView cv =  (CalendarView) findViewById(R.id.calendarView);
@@ -98,8 +102,13 @@ public class MainActivity extends AppCompatActivity {
                 participants = cursor.getString(10);
                 DataProvider dataProvider = new DataProvider(date, month, year, name, location,
                         start_hr, start_min, end_hr, end_min, description, participants);
-                listDataAdapter.add(dataProvider);
-
+                if (year >= todayYear) {
+                    if (month >= todayMonth) {
+                        if (date >= todayDate) {
+                            listDataAdapter.add(dataProvider);
+                        }
+                    }
+                }
             } while (cursor.moveToNext()); // true if there is rows after
         }
 

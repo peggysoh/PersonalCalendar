@@ -74,14 +74,6 @@ public class ListDataAdapter extends ArrayAdapter {
         View row = convertView;
         LayoutHandler layoutHandler;
 
-        /*View.OnClickListener saveView = new View.OnClickListener() {
-            @SuppressLint("NewApi")
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Clicked", Toast.LENGTH_LONG).show();
-                v.callOnClick();
-            }
-        };*/
-
         if(row == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = layoutInflater.inflate(R.layout.row_layout, parent, false);
@@ -99,12 +91,52 @@ public class ListDataAdapter extends ArrayAdapter {
         DataProvider dataProvider = (DataProvider) this.getItem(position);
         layoutHandler.DATE.setText(String.format("%02d", dataProvider.getMonth()) + "/" + String.format("%02d", dataProvider.getDate()) + "/" + String.format("%02d", dataProvider.getYear()));
         layoutHandler.NAME.setText(dataProvider.getName());
+
+       // Get time and check if it's all day
         if(dataProvider.getStart_hr() == -1) {
             layoutHandler.TIME.setText("All-Day");
         }
+        else if(dataProvider.getStart_hr() == 12) {
+            if(dataProvider.getEnd_hr() == 12) {
+                layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()) + ":" + String.format("%02d", dataProvider.getStart_min()) + "PM - " +
+                        String.format("%02d", dataProvider.getEnd_hr()) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "PM");
+            }
+            else if(dataProvider.getEnd_hr() > 12) {
+                layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()) + ":" + String.format("%02d", dataProvider.getStart_min()) + "PM - " +
+                        String.format("%02d", dataProvider.getEnd_hr()-12) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "PM");
+            }
+            else {
+                layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()) + ":" + String.format("%02d", dataProvider.getStart_min()) + "PM - " +
+                        String.format("%02d", dataProvider.getEnd_hr()) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "AM");
+            }
+        }
+        else if(dataProvider.getStart_hr() > 12) {
+            if(dataProvider.getEnd_hr() == 12) {
+                layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()-12) + ":" + String.format("%02d", dataProvider.getStart_min()) + "PM - " +
+                        String.format("%02d", dataProvider.getEnd_hr()) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "PM");
+            }
+            else if(dataProvider.getEnd_hr() > 12) {
+                layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()-12) + ":" + String.format("%02d", dataProvider.getStart_min()) + "PM - " +
+                        String.format("%02d", dataProvider.getEnd_hr()-12) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "PM");
+            }
+            else {
+                layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()-12) + ":" + String.format("%02d", dataProvider.getStart_min()) + "PM - " +
+                        String.format("%02d", dataProvider.getEnd_hr()) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "AM");
+            }
+        }
         else {
-            layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()) + ":" + String.format("%02d", dataProvider.getStart_min()) + " - " +
-                    String.format("%02d", dataProvider.getEnd_hr()) + ":" + String.format("%02d", dataProvider.getEnd_min()));
+            if(dataProvider.getEnd_hr() == 12) {
+                layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()) + ":" + String.format("%02d", dataProvider.getStart_min()) + "AM - " +
+                        String.format("%02d", dataProvider.getEnd_hr()) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "PM");
+            }
+            else if(dataProvider.getEnd_hr() > 12) {
+                layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()) + ":" + String.format("%02d", dataProvider.getStart_min()) + "AM - " +
+                        String.format("%02d", dataProvider.getEnd_hr()-12) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "PM");
+            }
+            else {
+                layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()) + ":" + String.format("%02d", dataProvider.getStart_min()) + "AM - " +
+                        String.format("%02d", dataProvider.getEnd_hr()) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "AM");
+            }
         }
 
         return row;

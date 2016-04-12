@@ -44,6 +44,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
 
 
+    // Add event
     public void addInfo(int date, int month, int year, String name, String location, int start_hr,
                         int start_min, int end_hr, int end_min, String description,
                         String participants, SQLiteDatabase db) {
@@ -68,8 +69,8 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
 
 
+    // Gets all events
     public Cursor getInfo(SQLiteDatabase db) {
-
         Cursor cursor;
         String[] projections = {EventContract.NewEventInfo.DATE, EventContract.NewEventInfo.MONTH,
                 EventContract.NewEventInfo.YEAR, EventContract.NewEventInfo.EVENT_NAME,
@@ -84,6 +85,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
 
 
+    // Get specific event
     public Cursor getEvent(String event_name, SQLiteDatabase sqLiteDatabase) {
 
         String[] projections = {EventContract.NewEventInfo.DATE, EventContract.NewEventInfo.MONTH,
@@ -100,6 +102,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
 
 
+    // Delete event
     public void deleteInfo(String event_name, SQLiteDatabase sqLiteDatabase) {
 
         String selection = EventContract.NewEventInfo.EVENT_NAME + " LIKE ?";
@@ -109,6 +112,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
 
 
+    // Edit event
     public int updateInfo(String old_event_name, int new_date, int new_month, int new_year, String new_name, String new_location, int new_start_hr,
                            int new_start_min, int new_end_hr, int new_end_min, String new_description, String new_participants, SQLiteDatabase sqLiteDatabase) {
 

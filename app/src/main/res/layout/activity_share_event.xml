@@ -9,10 +9,25 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.sealteamsix.personalcalendar.ShareEvent">
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:text="Select participants to share event with:"
+        android:id="@+id/participants_title"
+        android:typeface="sans"
+        android:textSize="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:textStyle="bold"
+        android:layout_alignParentBottom="false"
+        android:paddingTop="5dp"
+        android:textAlignment="textStart" />
+
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:id="@+id/emailList_view"
+        android:layout_below="@+id/participants_title"
         android:clickable="true" />
 
 </RelativeLayout>
