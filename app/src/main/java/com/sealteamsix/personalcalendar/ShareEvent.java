@@ -12,7 +12,6 @@ import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,7 +45,7 @@ public class ShareEvent extends AppCompatActivity {
         // Parsing String to StringArrayList
         final List<String> participantsList = Arrays.asList(participants.split(","));
 
-
+        // List of participants
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,participantsList);
         listView.setAdapter(adapter);
         listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
@@ -57,20 +56,20 @@ public class ShareEvent extends AppCompatActivity {
                     selections.add(participantsList.get(position));
                     listView.getChildAt(position).setBackgroundColor(Color.parseColor("#984666F8"));
                     count++;
-                    mode.setTitle(count + " Selected");
+                    mode.setTitle(count + " Participants Selected");
                 }
                 else {
                     selections.remove(participantsList.get(position));
                     listView.getChildAt(position).setBackgroundColor(Color.WHITE);
                     count--;
-                    mode.setTitle(count + " Selected");
+                    mode.setTitle(count + " Participants Selected");
                 }
             }
 
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 MenuInflater menuInflater = getMenuInflater();
-                menuInflater.inflate(R.menu.my_menu, menu);
+                menuInflater.inflate(R.menu.share_menu, menu);
                 return true;
             }
 

@@ -1,14 +1,11 @@
 package com.sealteamsix.personalcalendar;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -70,6 +67,7 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
         year = myIntent.getIntExtra("year", 0);
         title.setText("Add Event for " + month + "/" + date + "/" + year);
     }
+
 
     @Override
     public void onClick(View view) {

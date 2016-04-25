@@ -2,6 +2,8 @@ package com.sealteamsix.personalcalendar;
 
 /**
  * Created by SealTeam6 on 4/1/2016.
+ *
+ * Database column names
  */
 public class EventContract {
 

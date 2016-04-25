@@ -2,6 +2,8 @@ package com.sealteamsix.personalcalendar;
 
 /**
  * Created by SealTeam6 on 4/1/2016.
+ *
+ * Gets & Sets for event information stored in database.
  */
 public class DataProvider {
 

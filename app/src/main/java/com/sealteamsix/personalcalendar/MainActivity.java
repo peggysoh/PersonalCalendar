@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -71,9 +70,25 @@ public class MainActivity extends AppCompatActivity {
                 cvDate = date;
                 cvMonth = month+1;
                 cvYear = year;
+                initializeList();
             }
         });
 
+        // Initialize list
+        initializeList();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedName = (((TextView) view.findViewById(R.id.text_event_name)).getText()).toString();
+                Toast.makeText(getApplicationContext(), selectedName + " is selected.", Toast.LENGTH_SHORT).show();
+                editEvent(view, selectedName);
+            }
+        });
+    }
+
+
+    // Update list to show events for selected date
+    public void initializeList () {
         // Initializing list
         listView = (ListView) findViewById(R.id.listView);
         listDataAdapter = new ListDataAdapter(this, R.layout.row_layout);
@@ -102,25 +117,21 @@ public class MainActivity extends AppCompatActivity {
                 participants = cursor.getString(10);
                 DataProvider dataProvider = new DataProvider(date, month, year, name, location,
                         start_hr, start_min, end_hr, end_min, description, participants);
-                if (year >= todayYear) {
-                    if (month >= todayMonth) {
-                        if (date >= todayDate) {
+                if (year > cvYear) {
+                    listDataAdapter.add(dataProvider);
+                }
+                else if (year == cvYear) {
+                    if (month > cvMonth) {
+                        listDataAdapter.add(dataProvider);
+                    }
+                    else if (month == cvMonth) {
+                        if (date >= cvDate) {
                             listDataAdapter.add(dataProvider);
                         }
                     }
                 }
             } while (cursor.moveToNext()); // true if there is rows after
         }
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedName = (((TextView) view.findViewById(R.id.text_event_name)).getText()).toString();
-                Toast.makeText(getApplicationContext(), selectedName + " is selected.", Toast.LENGTH_SHORT).show();
-                Log.e("LIST OPERATIONS", "Click detected");
-                editEvent(view, selectedName);
-            }
-        });
     }
 
 

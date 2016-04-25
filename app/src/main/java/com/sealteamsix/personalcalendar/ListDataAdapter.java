@@ -1,6 +1,5 @@
 package com.sealteamsix.personalcalendar;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +14,9 @@ import java.util.List;
 
 /**
  * Created by SealTeam6 on 4/1/2016.
+ *
+ * Customized listView adapter
+ * Formats how data is displayed on row_layout.xml
  */
 public class ListDataAdapter extends ArrayAdapter {
 
@@ -96,6 +97,8 @@ public class ListDataAdapter extends ArrayAdapter {
         if(dataProvider.getStart_hr() == -1) {
             layoutHandler.TIME.setText("All-Day");
         }
+
+        // Format time accordingly for AM/PM
         else if(dataProvider.getStart_hr() == 12) {
             if(dataProvider.getEnd_hr() == 12) {
                 layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()) + ":" + String.format("%02d", dataProvider.getStart_min()) + "PM - " +
@@ -105,11 +108,35 @@ public class ListDataAdapter extends ArrayAdapter {
                 layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()) + ":" + String.format("%02d", dataProvider.getStart_min()) + "PM - " +
                         String.format("%02d", dataProvider.getEnd_hr()-12) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "PM");
             }
+            else if (dataProvider.getEnd_hr() == 00) {
+                layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()) + ":" + String.format("%02d", dataProvider.getStart_min()) + "PM - " +
+                        String.format("%02d", dataProvider.getEnd_hr() + 12) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "AM");
+            }
             else {
                 layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()) + ":" + String.format("%02d", dataProvider.getStart_min()) + "PM - " +
                         String.format("%02d", dataProvider.getEnd_hr()) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "AM");
             }
         }
+
+        else if(dataProvider.getStart_hr() == 00) {
+            if (dataProvider.getEnd_hr() == 12) {
+                layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr() + 12) + ":" + String.format("%02d", dataProvider.getStart_min()) + "AM - " +
+                        String.format("%02d", dataProvider.getEnd_hr()) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "PM");
+            }
+            else if (dataProvider.getEnd_hr() > 12) {
+                layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr() + 12) + ":" + String.format("%02d", dataProvider.getStart_min()) + "AM - " +
+                        String.format("%02d", dataProvider.getEnd_hr() - 12) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "PM");
+            }
+            else if (dataProvider.getEnd_hr() == 00) {
+                layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr() + 12) + ":" + String.format("%02d", dataProvider.getStart_min()) + "AM - " +
+                        String.format("%02d", dataProvider.getEnd_hr() + 12) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "AM");
+            }
+            else {
+                layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr() + 12) + ":" + String.format("%02d", dataProvider.getStart_min()) + "AM - " +
+                        String.format("%02d", dataProvider.getEnd_hr()) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "AM");
+            }
+        }
+
         else if(dataProvider.getStart_hr() > 12) {
             if(dataProvider.getEnd_hr() == 12) {
                 layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()-12) + ":" + String.format("%02d", dataProvider.getStart_min()) + "PM - " +
@@ -119,11 +146,16 @@ public class ListDataAdapter extends ArrayAdapter {
                 layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()-12) + ":" + String.format("%02d", dataProvider.getStart_min()) + "PM - " +
                         String.format("%02d", dataProvider.getEnd_hr()-12) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "PM");
             }
+            else if (dataProvider.getEnd_hr() == 00) {
+                layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()-12) + ":" + String.format("%02d", dataProvider.getStart_min()) + "PM - " +
+                        String.format("%02d", dataProvider.getEnd_hr()+12) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "AM");
+            }
             else {
                 layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()-12) + ":" + String.format("%02d", dataProvider.getStart_min()) + "PM - " +
                         String.format("%02d", dataProvider.getEnd_hr()) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "AM");
             }
         }
+
         else {
             if(dataProvider.getEnd_hr() == 12) {
                 layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()) + ":" + String.format("%02d", dataProvider.getStart_min()) + "AM - " +
@@ -132,6 +164,10 @@ public class ListDataAdapter extends ArrayAdapter {
             else if(dataProvider.getEnd_hr() > 12) {
                 layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()) + ":" + String.format("%02d", dataProvider.getStart_min()) + "AM - " +
                         String.format("%02d", dataProvider.getEnd_hr()-12) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "PM");
+            }
+            else if (dataProvider.getEnd_hr() == 00) {
+                layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()) + ":" + String.format("%02d", dataProvider.getStart_min()) + "PM - " +
+                        String.format("%02d", dataProvider.getEnd_hr()+12) + ":" + String.format("%02d", dataProvider.getEnd_min()) + "AM");
             }
             else {
                 layoutHandler.TIME.setText(String.format("%02d", dataProvider.getStart_hr()) + ":" + String.format("%02d", dataProvider.getStart_min()) + "AM - " +

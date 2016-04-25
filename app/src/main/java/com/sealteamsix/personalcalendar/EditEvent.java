@@ -1,6 +1,5 @@
 package com.sealteamsix.personalcalendar;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,15 +19,13 @@ import android.widget.Toast;
 public class EditEvent extends AppCompatActivity implements View.OnClickListener {
 
     private CheckBox check;
-    private Button button_save, button_delete;
-    private TextView startTime, endTime, title;
+    private Button button_save, button_delete, button_edit, button_share;
+    private TextView startTime, endTime, title, allDayTxt;
     private TimePicker startPicker, endPicker;
     private EditText display_Name, display_Location, display_Description, display_Participants;
     private EventDbHelper eventDbHelper;
     private SQLiteDatabase sqLiteDatabase;
-    private Context context = this;
     private DatePicker datePicker;
-    private int date, month, year;
     String name;
 
     @Override
@@ -45,11 +42,14 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
         check.setOnClickListener(this);
         button_save = (Button) findViewById(R.id.saveBtn);
         button_delete = (Button) findViewById(R.id.deleteBtn);
+        button_edit = (Button) findViewById(R.id.editBtn);
+        button_share = (Button) findViewById(R.id.shareBtn);
         display_Name = (EditText) findViewById(R.id.display_name);
         display_Location = (EditText) findViewById(R.id.display_location);
         display_Description = (EditText) findViewById(R.id.display_description);
         display_Participants = (EditText) findViewById(R.id.display_participants);
         datePicker = (DatePicker) findViewById(R.id.datePicker);
+        allDayTxt = (TextView) findViewById(R.id.allDayText);
 
         // Getting event
         Intent myIntent = getIntent();
@@ -84,26 +84,115 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
 
             if (START_HR == -1) {
                 check.setChecked(true);
-                startTime.setEnabled(false);
                 startPicker.setEnabled(false);
-                endTime.setEnabled(false);
                 endPicker.setEnabled(false);
+                startTime.setText("Time: All-Day");
             }
             else {
-                startTime.setEnabled(true);
                 startPicker.setEnabled(true);
-                endTime.setEnabled(true);
                 endPicker.setEnabled(true);
-
                 startPicker.setHour(START_HR);
                 startPicker.setMinute(START_MIN);
                 endPicker.setHour(END_HR);
                 endPicker.setMinute(END_MIN);
+
+                if(START_HR == 12) {
+                    if(END_HR == 12) {
+                        startTime.setText("Time: " + String.format("%02d", START_HR) + ":" + String.format("%02d", START_MIN) + "PM - " +
+                                String.format("%02d", END_HR) + ":" + String.format("%02d", END_MIN) + "PM");
+                    }
+                    else if(END_HR > 12) {
+                        startTime.setText("Time: " + String.format("%02d", START_HR) + ":" + String.format("%02d", START_MIN) + "PM - " +
+                                String.format("%02d", END_HR-12) + ":" + String.format("%02d", END_MIN) + "PM");
+                    }
+                    else if (END_HR == 00) {
+                        startTime.setText("Time: " + String.format("%02d", START_HR) + ":" + String.format("%02d", START_MIN) + "PM - " +
+                                String.format("%02d", END_HR+12) + ":" + String.format("%02d", END_MIN) + "AM");
+                    }
+                    else {
+                        startTime.setText("Time: " + String.format("%02d", START_HR) + ":" + String.format("%02d", START_MIN) + "PM - " +
+                                String.format("%02d", END_HR) + ":" + String.format("%02d", END_MIN) + "AM");
+                    }
+                }
+
+                else if(START_HR == 00) {
+                    if (END_HR == 12) {
+                        startTime.setText("Time: " + String.format("%02d",START_HR+12) + ":" + String.format("%02d", START_MIN) + "AM - " +
+                                String.format("%02d", END_HR) + ":" + String.format("%02d", END_MIN) + "PM");
+                    }
+                    else if (END_HR > 12) {
+                        startTime.setText("Time: " + String.format("%02d", START_HR+12) + ":" + String.format("%02d", START_MIN) + "AM - " +
+                                String.format("%02d", END_HR-12) + ":" + String.format("%02d", END_MIN) + "PM");
+                    }
+                    else if (END_HR == 00) {
+                        startTime.setText("Time: " + String.format("%02d", START_HR+12) + ":" + String.format("%02d", START_MIN) + "AM - " +
+                                String.format("%02d", END_HR+12) + ":" + String.format("%02d", END_MIN) + "AM");
+                    }
+                    else {
+                        startTime.setText("Time: " + String.format("%02d", START_HR+12) + ":" + String.format("%02d", START_MIN) + "AM - " +
+                                String.format("%02d", END_HR) + ":" + String.format("%02d", END_MIN) + "AM");
+                    }
+                }
+
+                else if(START_HR > 12) {
+                    if(END_HR == 12) {
+                        startTime.setText("Time: " + String.format("%02d", START_HR-12) + ":" + String.format("%02d", START_MIN) + "PM - " +
+                                String.format("%02d", END_HR) + ":" + String.format("%02d", END_MIN) + "PM");
+                    }
+                    else if(END_HR > 12) {
+                        startTime.setText("Time: " + String.format("%02d", START_HR-12) + ":" + String.format("%02d", START_MIN) + "PM - " +
+                                String.format("%02d", END_HR-12) + ":" + String.format("%02d", END_MIN) + "PM");
+                    }
+                    else if (END_HR == 00) {
+                        startTime.setText("Time: " + String.format("%02d", START_HR-12) + ":" + String.format("%02d", START_MIN) + "PM - " +
+                                String.format("%02d", END_HR+12) + ":" + String.format("%02d", END_MIN) + "AM");
+                    }
+                    else {
+                        startTime.setText("Time: " + String.format("%02d", START_HR-12) + ":" + String.format("%02d", START_MIN) + "PM - " +
+                                String.format("%02d", END_HR) + ":" + String.format("%02d", END_MIN) + "AM");
+                    }
+                }
+
+                else {
+                    if(END_HR == 12) {
+                        startTime.setText("Time: " + String.format("%02d", START_HR) + ":" + String.format("%02d", START_MIN) + "AM - " +
+                                String.format("%02d", END_HR) + ":" + String.format("%02d", END_MIN) + "PM");
+                    }
+                    else if(END_HR > 12) {
+                        startTime.setText("Time: " + String.format("%02d", START_HR) + ":" + String.format("%02d", START_MIN) + "AM - " +
+                                String.format("%02d",END_HR-12) + ":" + String.format("%02d", END_MIN) + "PM");
+                    }
+                    else if (END_HR == 00) {
+                        startTime.setText("Time: " + String.format("%02d", START_HR) + ":" + String.format("%02d", START_MIN) + "PM - " +
+                                String.format("%02d", END_HR+12) + ":" + String.format("%02d", END_MIN) + "AM");
+                    }
+                    else {
+                        startTime.setText("Time: " + String.format("%02d", START_HR) + ":" + String.format("%02d", START_MIN) + "AM - " +
+                                String.format("%02d", END_HR) + ":" + String.format("%02d", END_MIN) + "AM");
+                    }
+                }
+
             }
         }
+
+        // Disable edit fields
+        display_Name.setEnabled(false);
+        display_Location.setEnabled(false);
+        display_Description.setEnabled(false);
+        display_Participants.setEnabled(false);
+        allDayTxt.setVisibility(View.GONE);
+        check.setVisibility(View.GONE);
+        endTime.setVisibility(View.GONE);
+        startPicker.setVisibility(View.GONE);
+        endPicker.setVisibility(View.GONE);
+        button_save.setVisibility(View.GONE);
+        button_delete.setVisibility(View.GONE);
+        display_Description.setHint("No Description");
+        display_Participants.setHint("No Participants");
     }
 
 
+    // Updates event with new information
     public void updateEvent(View view) {
         eventDbHelper = new EventDbHelper(getApplicationContext());
         sqLiteDatabase = eventDbHelper.getReadableDatabase();
@@ -143,6 +232,7 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
     }
 
 
+    // Deletes event
     public void deleteEvent(View view) {
         eventDbHelper = new EventDbHelper(getApplicationContext());
         sqLiteDatabase = eventDbHelper.getReadableDatabase();
@@ -155,11 +245,32 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
     }
 
 
+    // Enables text fields for editing
+    public void editEvent(View view) {
+        display_Name.setEnabled(true);
+        display_Location.setEnabled(true);
+        display_Description.setEnabled(true);
+        display_Participants.setEnabled(true);
+        allDayTxt.setVisibility(View.VISIBLE);
+        check.setVisibility(View.VISIBLE);
+        endTime.setVisibility(View.VISIBLE);
+        startPicker.setVisibility(View.VISIBLE);
+        endPicker.setVisibility(View.VISIBLE);
+        button_save.setVisibility(View.VISIBLE);
+        button_delete.setVisibility(View.VISIBLE);
+        button_edit.setVisibility(View.GONE);
+        button_share.setVisibility(View.GONE);
+        startTime.setText("Start Time");
+        display_Description.setHint("Description");
+        display_Participants.setHint("Enter participants email separated by a comma");
+    }
+
+
+    // Share event
     public void shareEvent(View view) {
         Cursor cursor;
         int DATE, MONTH, YEAR, START_HR, START_MIN, END_HR, END_MIN;
         String LOCATION, DESCRIPTION, PARTICIPANTS;
-        String[] email_add = {"email_address"};
         String subject = "subject";
         String mail_body = "mail body";
         String participants = "email_address";
@@ -180,7 +291,6 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
             DESCRIPTION = cursor.getString(8);
             PARTICIPANTS = cursor.getString(9);
 
-            email_add = new String[]{PARTICIPANTS};
             participants = PARTICIPANTS;
             subject = new String("Event Reminder: " + name);
             if (START_HR == -1) {
@@ -201,21 +311,8 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
             }
         }
 
-        /*
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("plain/text");
-        intent.putExtra(Intent.EXTRA_EMAIL, email_add);
-        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
-        intent.putExtra(Intent.EXTRA_TEXT, mail_body);
-        startActivity(Intent.createChooser(intent, ""));
-
-        setResult(RESULT_OK, null);
-        finish();
-        */
-
         Intent intent = new Intent(this, ShareEvent.class);
         intent.putExtra("participants", participants);
-        //intent.putExtra("participants", email_add);
         intent.putExtra("subject", subject);
         intent.putExtra("mail_body", mail_body);
         startActivity(intent);
