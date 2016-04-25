@@ -113,6 +113,8 @@ public class SearchEvent extends AppCompatActivity {
         Intent intent = new Intent(this, EditEvent.class);
         intent.putExtra("name", selectedName);
         startActivityForResult(intent, 1);
+        setResult(RESULT_OK, null);
+        finish();
     }
 
 
