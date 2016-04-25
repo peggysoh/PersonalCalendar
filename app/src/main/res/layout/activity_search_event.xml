@@ -13,18 +13,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/search_icon"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="3dp"
         android:src="@drawable/ic_magnify_grey_24dp"
         android:focusable="false"
-        android:background="#ffffff" />
+        android:background="#ffffff"
+        android:onClick="searchEvent" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/search_box"
-        android:hint="Event Name"
+        android:hint="Enter Event Name"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/search_icon" />
+        android:layout_toEndOf="@+id/search_icon"
+        android:imeOptions="actionSend" />
 
     <ListView
         android:layout_width="match_parent"

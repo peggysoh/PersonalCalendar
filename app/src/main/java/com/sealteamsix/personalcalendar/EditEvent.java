@@ -1,5 +1,8 @@
 package com.sealteamsix.personalcalendar;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -175,20 +178,7 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
             }
         }
 
-        // Disable edit fields
-        display_Name.setEnabled(false);
-        display_Location.setEnabled(false);
-        display_Description.setEnabled(false);
-        display_Participants.setEnabled(false);
-        allDayTxt.setVisibility(View.GONE);
-        check.setVisibility(View.GONE);
-        endTime.setVisibility(View.GONE);
-        startPicker.setVisibility(View.GONE);
-        endPicker.setVisibility(View.GONE);
-        button_save.setVisibility(View.GONE);
-        button_delete.setVisibility(View.GONE);
-        display_Description.setHint("No Description");
-        display_Participants.setHint("No Participants");
+        disableFields();
     }
 
 
@@ -228,20 +218,40 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
         eventDbHelper.close();
         Toast.makeText(this, "Event updated.", Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK, null);
+        Intent intent = getIntent();
+        intent.putExtra("name", new_name);
         finish();
+        startActivity(intent);
     }
 
 
     // Deletes event
     public void deleteEvent(View view) {
-        eventDbHelper = new EventDbHelper(getApplicationContext());
-        sqLiteDatabase = eventDbHelper.getReadableDatabase();
-        eventDbHelper.deleteInfo(name, sqLiteDatabase);
-        Toast.makeText(this, "Event deleted.", Toast.LENGTH_SHORT).show();
-        eventDbHelper.close();
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Delete Event")
+                .setMessage("Are you sure you want to delete this event?")
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        eventDbHelper = new EventDbHelper(getApplicationContext());
+                        sqLiteDatabase = eventDbHelper.getReadableDatabase();
+                        eventDbHelper.deleteInfo(name, sqLiteDatabase);
+                        eventDbHelper.close();
+                        Toast.makeText(getApplicationContext(), "Event deleted.", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
 
-        setResult(RESULT_OK, null);
-        finish();
+                        setResult(RESULT_OK, null);
+                        finish();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        dialog.show();
     }
 
 
@@ -263,6 +273,25 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
         startTime.setText("Start Time");
         display_Description.setHint("Description");
         display_Participants.setHint("Enter participants email separated by a comma");
+    }
+
+
+    // Disables text fields for editing
+    public void disableFields() {
+        // Disable edit fields
+        display_Name.setEnabled(false);
+        display_Location.setEnabled(false);
+        display_Description.setEnabled(false);
+        display_Participants.setEnabled(false);
+        allDayTxt.setVisibility(View.GONE);
+        check.setVisibility(View.GONE);
+        endTime.setVisibility(View.GONE);
+        startPicker.setVisibility(View.GONE);
+        endPicker.setVisibility(View.GONE);
+        button_save.setVisibility(View.GONE);
+        button_delete.setVisibility(View.GONE);
+        display_Description.setHint("No Description");
+        display_Participants.setHint("No Participants");
     }
 
 

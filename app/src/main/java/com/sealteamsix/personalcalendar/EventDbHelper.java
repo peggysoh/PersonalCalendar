@@ -139,6 +139,24 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
 
 
+    // Search for partial matched events in database
+    public Cursor searchEvent(String search_name, SQLiteDatabase sqLiteDatabase) {
+        String[] projections = {EventContract.NewEventInfo.DATE, EventContract.NewEventInfo.MONTH,
+                EventContract.NewEventInfo.YEAR, EventContract.NewEventInfo.LOCATION,
+                EventContract.NewEventInfo.START_HR, EventContract.NewEventInfo.START_MIN,
+                EventContract.NewEventInfo.END_HR, EventContract.NewEventInfo.END_MIN,
+                EventContract.NewEventInfo.DESCRIPTION, EventContract.NewEventInfo.PARTICIPANTS,
+                EventContract.NewEventInfo.EVENT_NAME};
+        String selection = EventContract.NewEventInfo.EVENT_NAME + " LIKE ?";
+        String[] selection_args = {"%" + search_name + "%"};
+
+        Cursor cursor = sqLiteDatabase.query(EventContract.NewEventInfo.TABLE_NAME, projections, selection, selection_args, null, null,
+                EventContract.NewEventInfo.YEAR + " ASC," + EventContract.NewEventInfo.MONTH + " ASC," + EventContract.NewEventInfo.DATE + " ASC");
+
+        return cursor;
+    }
+
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 

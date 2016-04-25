@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -81,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedName = (((TextView) view.findViewById(R.id.text_event_name)).getText()).toString();
-                Toast.makeText(getApplicationContext(), selectedName + " is selected.", Toast.LENGTH_SHORT).show();
                 editEvent(view, selectedName);
             }
         });
