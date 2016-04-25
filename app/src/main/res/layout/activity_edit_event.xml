@@ -41,7 +41,8 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_below="@+id/datePicker"
                 android:hint="Event Name"
-                android:textColor="@color/hint_foreground_material_light" />
+                android:textColor="@color/hint_foreground_material_light"
+                android:textSize="24dp" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -85,7 +86,7 @@
                 android:textSize="18dp"
                 android:typeface="sans"
                 android:layout_gravity="right"
-                android:layout_below="@+id/allDayText"
+                android:layout_below="@+id/date"
                 android:layout_alignParentStart="true" />
 
             <TextView
@@ -95,8 +96,20 @@
                 android:text=" End Time"
                 android:textSize="18dp"
                 android:typeface="sans"
-                android:layout_below="@+id/allDayText"
+                android:layout_below="@+id/date"
                 android:layout_alignStart="@+id/timePicker_end" />
+
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/date"
+                android:layout_below="@+id/allDayText"
+                android:text=" Date"
+                android:textSize="18dp"
+                android:typeface="sans"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentStart="true" />
 
             <EditText
                 android:layout_width="match_parent"
