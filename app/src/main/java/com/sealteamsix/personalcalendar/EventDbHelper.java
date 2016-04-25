@@ -3,6 +3,7 @@ package com.sealteamsix.personalcalendar;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -92,7 +93,8 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EventContract.NewEventInfo.YEAR, EventContract.NewEventInfo.LOCATION,
                 EventContract.NewEventInfo.START_HR, EventContract.NewEventInfo.START_MIN,
                 EventContract.NewEventInfo.END_HR, EventContract.NewEventInfo.END_MIN,
-                EventContract.NewEventInfo. DESCRIPTION, EventContract.NewEventInfo.PARTICIPANTS};
+                EventContract.NewEventInfo.DESCRIPTION, EventContract.NewEventInfo.PARTICIPANTS,
+                EventContract.NewEventInfo.EVENT_NAME};
         String selection = EventContract.NewEventInfo.EVENT_NAME + " LIKE ?";
         String[] selection_args = {event_name};
 

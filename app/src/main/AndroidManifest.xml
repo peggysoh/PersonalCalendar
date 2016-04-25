@@ -27,9 +27,11 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".AddEvent" />
-        <activity android:name=".EditEvent"
-                  android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".EditEvent"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".ShareEvent" />
+        <activity android:name=".SearchEvent"></activity>
     </application>
 
 </manifest>
