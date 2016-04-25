@@ -21,7 +21,7 @@ public class SearchEvent extends AppCompatActivity {
 
     private ListView listView;
     private EditText searchName;
-    String search_name;
+    String search_name, last_search;
     ListDataAdapter listDataAdapter;
     SQLiteDatabase sqLiteDatabase;
     EventDbHelper eventDbHelper;
@@ -67,7 +67,6 @@ public class SearchEvent extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedName = (((TextView) view.findViewById(R.id.text_event_name)).getText()).toString();
                 editEvent(view, selectedName);
-                setResult(RESULT_OK, null);
                 finish();
             }
         });
@@ -83,6 +82,7 @@ public class SearchEvent extends AppCompatActivity {
         listView.setAdapter(listDataAdapter);
 
         search_name = searchName.getText().toString();
+        last_search = search_name;
         eventDbHelper = new EventDbHelper(getApplicationContext());
         sqLiteDatabase = eventDbHelper.getReadableDatabase();
         cursor = eventDbHelper.searchEvent(search_name, sqLiteDatabase);

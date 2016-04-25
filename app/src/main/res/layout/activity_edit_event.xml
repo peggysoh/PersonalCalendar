@@ -95,7 +95,7 @@
                 android:text=" End Time"
                 android:textSize="18dp"
                 android:typeface="sans"
-                android:layout_below="@+id/startTime"
+                android:layout_below="@+id/allDayText"
                 android:layout_alignStart="@+id/timePicker_end" />
 
             <EditText
