@@ -10,10 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -23,12 +25,13 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
 
     private CheckBox check;
     private Button button_save, button_delete, button_edit, button_share;
-    private TextView startTime, endTime, title, allDayTxt, date;
+    private TextView startTime, endTime, title, allDayTxt, date, eventType;
     private TimePicker startPicker, endPicker;
     private EditText display_Name, display_Location, display_Description, display_Participants;
     private EventDbHelper eventDbHelper;
     private SQLiteDatabase sqLiteDatabase;
     private DatePicker datePicker;
+    private Spinner drop_eventType;
     String name;
 
     @Override
@@ -54,6 +57,13 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
         display_Participants = (EditText) findViewById(R.id.display_participants);
         datePicker = (DatePicker) findViewById(R.id.datePicker);
         allDayTxt = (TextView) findViewById(R.id.allDayText);
+        eventType = (TextView) findViewById(R.id.eventType);
+        drop_eventType = (Spinner) findViewById(R.id.spinner_eventType);
+
+        // Setting up event type dropdown menu
+        String[] items = new String[]{"Holiday", "Birthday", "School", "Work", "Personal", "Other"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        drop_eventType.setAdapter(adapter);
 
         // Getting event
         Intent myIntent = getIntent();
@@ -79,6 +89,7 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
             int END_MIN = cursor.getInt(7);
             String DESCRIPTION = cursor.getString(8);
             String PARTICIPANTS = cursor.getString(9);
+            String TYPE = cursor.getString(11);
 
             display_Name.setText(name);
             display_Location.setText(LOCATION);
@@ -86,6 +97,20 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
             display_Participants.setText(PARTICIPANTS);
             date.setText(" Date: " + MONTH + "/" + DATE + "/" + YEAR);
             datePicker.updateDate(YEAR, MONTH-1, DATE);
+            eventType.setText(" Event Type: " + TYPE);
+
+            if(TYPE.equals("Holiday"))
+                drop_eventType.setSelection(0);
+            else if(TYPE.equals("Birthday"))
+                drop_eventType.setSelection(1);
+            else if(TYPE.equals("School"))
+                drop_eventType.setSelection(2);
+            else if(TYPE.equals("Work"))
+                drop_eventType.setSelection(3);
+            else if(TYPE.equals("Personal"))
+                drop_eventType.setSelection(4);
+            else
+                drop_eventType.setSelection(5);
 
             if (START_HR == -1) {
                 check.setChecked(true);
@@ -192,7 +217,7 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
         // Get new event details
         // old_event_name, new_date, new_month, new_year, new_name, new_location, new_start_hr,
         // new_start_min, new_end_hr, new_end_min, new_description, new_participants
-        String new_name, new_location, new_description, new_participants;
+        String new_name, new_location, new_description, new_participants, new_type;
         int new_date, new_month, new_year, new_startHr, new_startMin, new_endHr, new_endMin;
         new_name = display_Name.getText().toString();
         new_location = display_Location.getText().toString();
@@ -201,6 +226,8 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
         new_date = datePicker.getDayOfMonth();
         new_month = datePicker.getMonth()+1;
         new_year = datePicker.getYear();
+        new_type = drop_eventType.getSelectedItem().toString();
+
         if (check.isChecked() == true) { //all day event
             new_startHr = -1;
             new_startMin = -1;
@@ -215,7 +242,7 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
         }
 
         eventDbHelper.updateInfo(name, new_date, new_month, new_year, new_name, new_location, new_startHr,
-                new_startMin, new_endHr, new_endMin, new_description, new_participants, sqLiteDatabase);
+                new_startMin, new_endHr, new_endMin, new_description, new_participants, new_type, sqLiteDatabase);
 
         eventDbHelper.close();
         Toast.makeText(this, "Event updated.", Toast.LENGTH_SHORT).show();
@@ -263,6 +290,7 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
         display_Location.setEnabled(true);
         display_Description.setEnabled(true);
         display_Participants.setEnabled(true);
+        drop_eventType.setVisibility(View.VISIBLE);
         datePicker.setVisibility(View.VISIBLE);
         allDayTxt.setVisibility(View.VISIBLE);
         check.setVisibility(View.VISIBLE);
@@ -271,6 +299,7 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
         endPicker.setVisibility(View.VISIBLE);
         button_save.setVisibility(View.VISIBLE);
         button_delete.setVisibility(View.VISIBLE);
+        eventType.setVisibility(View.GONE);
         date.setVisibility(View.GONE);
         button_edit.setVisibility(View.GONE);
         button_share.setVisibility(View.GONE);
@@ -278,6 +307,7 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
         title.setText("Edit Event");
         display_Description.setHint("Description");
         display_Participants.setHint("Enter participants email separated by a comma");
+        display_Location.setHint("Location");
     }
 
 
@@ -288,7 +318,9 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
         display_Location.setEnabled(false);
         display_Description.setEnabled(false);
         display_Participants.setEnabled(false);
+        eventType.setVisibility(View.VISIBLE);
         date.setVisibility(View.VISIBLE);
+        drop_eventType.setVisibility(View.GONE);
         datePicker.setVisibility(View.GONE);
         allDayTxt.setVisibility(View.GONE);
         check.setVisibility(View.GONE);
@@ -299,6 +331,7 @@ public class EditEvent extends AppCompatActivity implements View.OnClickListener
         button_delete.setVisibility(View.GONE);
         display_Description.setHint("No Description");
         display_Participants.setHint("No Participants");
+        display_Location.setHint("No Location");
         title.setText("Event Details");
     }
 

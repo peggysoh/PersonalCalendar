@@ -20,6 +20,16 @@ public class DataProvider {
     private String description;
     private String participants;
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    private String type;
+
 
     public int getId() {
         return id;
@@ -119,7 +129,7 @@ public class DataProvider {
     }
 
     public DataProvider(int date, int month, int year, String name, String location, int start_hr,
-                        int start_min, int end_hr, int end_min, String description, String participants) {
+                        int start_min, int end_hr, int end_min, String description, String participants, String type) {
 
         this.date = date;
         this.month = month;
@@ -132,6 +142,6 @@ public class DataProvider {
         this.end_min = end_min;
         this.description = description;
         this.participants = participants;
-
+        this.type = type;
     }
 }

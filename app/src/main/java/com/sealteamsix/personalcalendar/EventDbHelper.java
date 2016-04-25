@@ -19,7 +19,8 @@ public class EventDbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String CREATE_QUERY =
             "CREATE TABLE " + EventContract.NewEventInfo.TABLE_NAME + "(" +
-                    "id" + " INTEGER PRIMARY KEY," +
+                    EventContract.NewEventInfo.EVENT_ID + " INTEGER PRIMARY KEY," +
+                    EventContract.NewEventInfo.EVENT_TYPE + " TEXT," +
                     EventContract.NewEventInfo.DATE + " INTEGER," +
                     EventContract.NewEventInfo.MONTH + " INTEGER," +
                     EventContract.NewEventInfo.YEAR + " INTEGER," +
@@ -49,9 +50,10 @@ public class EventDbHelper extends SQLiteOpenHelper {
     // Add event to database
     public void addInfo(int date, int month, int year, String name, String location, int start_hr,
                         int start_min, int end_hr, int end_min, String description,
-                        String participants, SQLiteDatabase db) {
+                        String participants, String type, SQLiteDatabase db) {
         // Set values
         ContentValues contentValues = new ContentValues();
+        contentValues.put(EventContract.NewEventInfo.EVENT_TYPE, type);
         contentValues.put(EventContract.NewEventInfo.DATE, date);
         contentValues.put(EventContract.NewEventInfo.MONTH, month);
         contentValues.put(EventContract.NewEventInfo.YEAR, year);
@@ -78,7 +80,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EventContract.NewEventInfo.LOCATION, EventContract.NewEventInfo.START_HR,
                 EventContract.NewEventInfo.START_MIN, EventContract.NewEventInfo.END_HR,
                 EventContract.NewEventInfo.END_MIN, EventContract.NewEventInfo. DESCRIPTION,
-                EventContract.NewEventInfo.PARTICIPANTS};
+                EventContract.NewEventInfo.PARTICIPANTS, EventContract.NewEventInfo.EVENT_TYPE};
 
         cursor = db.query(EventContract.NewEventInfo.TABLE_NAME, projections, null, null, null, null,
                 EventContract.NewEventInfo.YEAR + " ASC," + EventContract.NewEventInfo.MONTH + " ASC," + EventContract.NewEventInfo.DATE + " ASC");
@@ -94,7 +96,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EventContract.NewEventInfo.START_HR, EventContract.NewEventInfo.START_MIN,
                 EventContract.NewEventInfo.END_HR, EventContract.NewEventInfo.END_MIN,
                 EventContract.NewEventInfo.DESCRIPTION, EventContract.NewEventInfo.PARTICIPANTS,
-                EventContract.NewEventInfo.EVENT_NAME};
+                EventContract.NewEventInfo.EVENT_NAME, EventContract.NewEventInfo.EVENT_TYPE};
         String selection = EventContract.NewEventInfo.EVENT_NAME + " LIKE ?";
         String[] selection_args = {event_name};
 
@@ -116,7 +118,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
     // Updates event in database
     public int updateInfo(String old_event_name, int new_date, int new_month, int new_year, String new_name, String new_location, int new_start_hr,
-                           int new_start_min, int new_end_hr, int new_end_min, String new_description, String new_participants, SQLiteDatabase sqLiteDatabase) {
+                           int new_start_min, int new_end_hr, int new_end_min, String new_description, String new_participants, String new_type, SQLiteDatabase sqLiteDatabase) {
         // Set values
         ContentValues contentValues = new ContentValues();
         contentValues.put(EventContract.NewEventInfo.DATE, new_date);
@@ -130,6 +132,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
         contentValues.put(EventContract.NewEventInfo.END_MIN, new_end_min);
         contentValues.put(EventContract.NewEventInfo.DESCRIPTION, new_description);
         contentValues.put(EventContract.NewEventInfo.PARTICIPANTS, new_participants);
+        contentValues.put(EventContract.NewEventInfo.EVENT_TYPE, new_type);
 
         String selection = EventContract.NewEventInfo.EVENT_NAME + " LIKE ?";
         String[] selection_args = {old_event_name};
@@ -146,9 +149,9 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EventContract.NewEventInfo.START_HR, EventContract.NewEventInfo.START_MIN,
                 EventContract.NewEventInfo.END_HR, EventContract.NewEventInfo.END_MIN,
                 EventContract.NewEventInfo.DESCRIPTION, EventContract.NewEventInfo.PARTICIPANTS,
-                EventContract.NewEventInfo.EVENT_NAME};
-        String selection = EventContract.NewEventInfo.EVENT_NAME + " LIKE ?";
-        String[] selection_args = {"%" + search_name + "%"};
+                EventContract.NewEventInfo.EVENT_NAME, EventContract.NewEventInfo.EVENT_TYPE};
+        String selection = EventContract.NewEventInfo.EVENT_NAME + " LIKE ? OR " + EventContract.NewEventInfo.EVENT_TYPE + " LIKE ? ";
+        String[] selection_args = {"%" + search_name + "%", "%" + search_name + "%"};
 
         Cursor cursor = sqLiteDatabase.query(EventContract.NewEventInfo.TABLE_NAME, projections, selection, selection_args, null, null,
                 EventContract.NewEventInfo.YEAR + " ASC," + EventContract.NewEventInfo.MONTH + " ASC," + EventContract.NewEventInfo.DATE + " ASC");

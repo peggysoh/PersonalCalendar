@@ -76,7 +76,7 @@ public class SearchEvent extends AppCompatActivity {
     public void searchEvent(View view) {
         Cursor cursor;
         int DATE, MONTH, YEAR, START_HR, START_MIN, END_HR, END_MIN;
-        String LOCATION, DESCRIPTION, PARTICIPANTS, NAME;
+        String LOCATION, DESCRIPTION, PARTICIPANTS, NAME, TYPE;
 
         listDataAdapter = new ListDataAdapter(this, R.layout.row_layout);
         listView.setAdapter(listDataAdapter);
@@ -99,9 +99,10 @@ public class SearchEvent extends AppCompatActivity {
                 DESCRIPTION = cursor.getString(8);
                 PARTICIPANTS = cursor.getString(9);
                 NAME = cursor.getString(10);
+                TYPE = cursor.getString(11);
 
                 DataProvider dataProvider = new DataProvider(DATE, MONTH, YEAR, NAME, LOCATION,
-                        START_HR, START_MIN, END_HR, END_MIN, DESCRIPTION, PARTICIPANTS);
+                        START_HR, START_MIN, END_HR, END_MIN, DESCRIPTION, PARTICIPANTS, TYPE);
                 listDataAdapter.add(dataProvider);
             } while (cursor.moveToNext()); // true if there is rows after
         }

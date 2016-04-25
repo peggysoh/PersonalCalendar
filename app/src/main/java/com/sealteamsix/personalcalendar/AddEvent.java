@@ -7,9 +7,11 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -20,6 +22,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 public class AddEvent extends AppCompatActivity implements View.OnClickListener {
 
+    private Spinner drop_eventType;
     private CheckBox check1;
     private Button button_save;
     private TextView startTime, endTime, title;
@@ -59,6 +62,12 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
         etLocation = (EditText) findViewById(R.id.location);
         etDescription = (EditText) findViewById(R.id.description);
         etParticipants = (EditText) findViewById(R.id.participants);
+        drop_eventType = (Spinner) findViewById(R.id.spinner_eventType);
+
+        // Setting up event type dropdown menu
+        String[] items = new String[]{"Holiday", "Birthday", "School", "Work", "Personal", "Other"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        drop_eventType.setAdapter(adapter);
 
         // Getting date, month, year
         Intent myIntent = getIntent();
@@ -100,6 +109,8 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
                 String location = etLocation.getText().toString();
                 String description = etDescription.getText().toString();
                 String participants = etParticipants.getText().toString();
+                String eventType = drop_eventType.getSelectedItem().toString();
+
                 if (check1.isChecked() == true) { //all day event
                     startHour = -1;
                     startMin = -1;
@@ -117,7 +128,7 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
                 eventDbHelper = new EventDbHelper(context);
                 sqLiteDatabase = eventDbHelper.getWritableDatabase();
                 eventDbHelper.addInfo(date, month, year, name, location, startHour, startMin,
-                        endHour, endMin, description, participants, sqLiteDatabase);
+                        endHour, endMin, description, participants, eventType, sqLiteDatabase);
 
                 // Event added
                 Toast.makeText(this, "Event added.", Toast.LENGTH_SHORT).show();

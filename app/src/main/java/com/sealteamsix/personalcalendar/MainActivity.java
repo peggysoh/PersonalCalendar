@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         if(cursor.moveToFirst()) {  // true if there is info in DB
             do {
                 int date, month, year, start_hr, start_min, end_hr, end_min;
-                String name, location, description, participants;
+                String name, location, description, participants, type;
 
                 // Get data from cursor
                 // 0 DATE 1 MONTH 2 YEAR 3 EVENT_NAME 4 LOCATION 5 START_HR 6 START_MIN
@@ -114,8 +114,9 @@ public class MainActivity extends AppCompatActivity {
                 end_min = cursor.getInt(8);
                 description = cursor.getString(9);
                 participants = cursor.getString(10);
+                type = cursor.getString(11);
                 DataProvider dataProvider = new DataProvider(date, month, year, name, location,
-                        start_hr, start_min, end_hr, end_min, description, participants);
+                        start_hr, start_min, end_hr, end_min, description, participants, type);
                 if (year > cvYear) {
                     listDataAdapter.add(dataProvider);
                 }

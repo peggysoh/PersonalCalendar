@@ -92,6 +92,19 @@ public class ListDataAdapter extends ArrayAdapter {
         DataProvider dataProvider = (DataProvider) this.getItem(position);
         layoutHandler.DATE.setText(String.format("%02d", dataProvider.getMonth()) + "/" + String.format("%02d", dataProvider.getDate()) + "/" + String.format("%02d", dataProvider.getYear()));
         layoutHandler.NAME.setText(dataProvider.getName());
+        String TYPE = dataProvider.getType();
+        if (TYPE.equals("Personal"))
+            layoutHandler.BULLET.setImageResource(R.drawable.pink_circle);
+        else if (TYPE.equals("Holiday"))
+            layoutHandler.BULLET.setImageResource(R.drawable.yellow_circle);
+        else if (TYPE.equals("Birthday"))
+            layoutHandler.BULLET.setImageResource(R.drawable.purple_circle);
+        else if (TYPE.equals("School"))
+            layoutHandler.BULLET.setImageResource(R.drawable.blue_circle);
+        else if (TYPE.equals("Work"))
+            layoutHandler.BULLET.setImageResource(R.drawable.green_circle);
+        else
+            layoutHandler.BULLET.setImageResource(R.drawable.orange_circle);
 
        // Get time and check if it's all day
         if(dataProvider.getStart_hr() == -1) {

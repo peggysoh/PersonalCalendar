@@ -10,6 +10,8 @@ public class EventContract {
     public static abstract class NewEventInfo {
 
         // Column names
+        public static final String EVENT_TYPE = "event_type";
+        public static final String EVENT_ID = "event_id";
         public static final String EVENT_NAME = "event_name";
         public static final String LOCATION = "location";
         public static final String DESCRIPTION = "description";
