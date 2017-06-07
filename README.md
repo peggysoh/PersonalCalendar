@@ -1,2 +1,2 @@
 # PersonalCalendar
-Personal calendar project for Android Devices
+Personal calendar app for Android Devices
